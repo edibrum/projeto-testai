@@ -2,7 +2,7 @@
 Projeto Proposto - Teste Java Full Stack
 
 # Proposta apresentada aqui:
-O Projeot foi iniciado usando https://start.spring.io/ para agilizar o processo.
+O Projeto foi iniciado usando https://start.spring.io/ para agilizar o processo.
 
   Opções selecionadas: Project: Maven | Language: Java | Spring Boot: 3.3.3 | Packaging: Jar | Java: 17.
 

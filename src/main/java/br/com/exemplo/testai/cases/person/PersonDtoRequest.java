@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @Schema(description = "Responsável por transportar e validar informações de entrada.")
-public class PersonDtoRequest {
+public final class PersonDtoRequest {
 
     @Schema(description = "Identificador do registro no Banco PostgreSQL", type = "Long", example = "111", required = false)
     private Long id;

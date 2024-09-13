@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @Schema(description = "Responsável por transportar e validar informações de entrada.")
-public class ProjectMemberDtoRequest {
+public final class ProjectMemberDtoRequest {
 
     @Schema(description = "Identificador do registro no Banco PostgreSQL", type = "Long", example = "111", required = false)
     @Positive

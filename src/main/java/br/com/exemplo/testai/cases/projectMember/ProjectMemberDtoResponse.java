@@ -1,5 +1,7 @@
 package br.com.exemplo.testai.cases.projectMember;
 
+import br.com.exemplo.testai.cases.person.PersonDtoResponse;
+import br.com.exemplo.testai.cases.project.ProjectDtoResponse;
 import br.com.exemplo.testai.models.ProjectMember;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -11,8 +13,8 @@ import java.util.Date;
 public final class ProjectMemberDtoResponse {
 
     private Long id;
-    private Long projectId;
-    private Long personId;
+    private ProjectDtoResponse project;
+    private PersonDtoResponse person;
     private Date startDate;
     private Date endDate;
     private String role;
@@ -20,8 +22,8 @@ public final class ProjectMemberDtoResponse {
 
     public ProjectMemberDtoResponse(ProjectMember entity) {
         setId(entity.getId());
-        setProjectId(entity.getProjectId());
-        setPersonId(entity.getPersonId());
+        setProject(new ProjectDtoResponse(entity.getProject()));
+        setPerson(new PersonDtoResponse(entity.getPerson()));
         setStartDate(entity.getStartDate());
         setEndDate(entity.getEndDate());
         setRole(entity.getRole());

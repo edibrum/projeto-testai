@@ -37,8 +37,10 @@ public final class ProjectDtoRequest {
     private String description;
 
     @Schema(description = "Status do Projeto (máximo de 45 carácteres)", type = "String", example = "Em Andamento", required = true)
+    @NotNull
+    @NotEmpty
     @Size(max = 45)
-    @EnumValidation(values = {"Agendado", "Iniciado", "Em Andamento", "Finalizado", "Cancelado"}, message = "Valores aceitos: Agendado, Iniciado, Em Andamento, Finalizado, Cancelado", isRequired = false)
+    @EnumValidation(values = {"Em Análise", "Análise Realizada", "Análise Aprovada", "Iniciado", "Planejado", "Em Andamento", "Encerrado", "Cancelado"}, message = "Valores aceitos: Em Análise, Análise Realizada, Análise Aprovada, Iniciado, Planejado, Em Andamento, Encerrado, Cancelado", isRequired = false)
     private String status;
 
     @Schema(description = "Orçamento do Projeto", type = "Double", example = "20.000,00", required = true)
@@ -47,7 +49,7 @@ public final class ProjectDtoRequest {
 
     @Schema(description = "Risco do Projeto (máximo de 45 carácteres)", type = "String", example = "Baixo", required = true)
     @Size(max = 45)
-    @EnumValidation(values = {"Inexistente", "Baixo", "Médio", "Alto"}, message = "Valores aceitos: Inexistente, Baixo, Médio, ou Alto", isRequired = false)
+    @EnumValidation(values = {"Baixo", "Médio", "Alto"}, message = "Valores aceitos: Baixo, Médio, ou Alto", isRequired = false)
     private String risk;
 
     @Schema(description = "Identificador do Gerente do Projeto", type = "Long", example = "912", required = true)

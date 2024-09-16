@@ -1,8 +1,12 @@
 package br.com.exemplo.testai.models;
 
+import br.com.exemplo.testai.cases.project.ProjectDtoRequest;
+import br.com.exemplo.testai.cases.projectMember.ProjectMemberDtoRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -19,11 +23,17 @@ public class ProjectMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_projeto", nullable = false)
-    private Long projectId;
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "id_projeto", nullable = false)
+    private Project project;
 
-    @Column(name = "id_pessoa", nullable = false)
-    private Long personId;
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "id_pessoa", nullable = false)
+    private Person person;
 
     //  TODO: alinhar sobre estes novos possíveis campos com o cliente
     @Column(name = "data_entrada_no_projeto", nullable = false)
@@ -37,5 +47,12 @@ public class ProjectMember {
 
     @Column(name = "vinculo_ativo", nullable = false)
     private Boolean active;
+
+    public ProjectMember(ProjectMemberDtoRequest dtoRequest) {
+        setStartDate(dtoRequest.getStartDate());
+        setEndDate(dtoRequest.getEndDate());
+        setRole(dtoRequest.getRole());
+        setActive(dtoRequest.getActive());
+    }
 
 }

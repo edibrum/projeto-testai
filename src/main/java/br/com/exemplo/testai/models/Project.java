@@ -1,5 +1,6 @@
 package br.com.exemplo.testai.models;
 
+import br.com.exemplo.testai.cases.project.ProjectDtoRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +34,7 @@ public class Project {
     @Column(name = "descricao", length = 5000)
     private String description;
 
-    @Column(name = "status", length = 45)
+    @Column(name = "status", length = 45, nullable = false)
     private String status;
 
     @Column(name = "orcamento")
@@ -43,5 +45,17 @@ public class Project {
 
     @Column(name = "id_gerente", nullable = false)
     private Long managerId;
+
+    public Project(ProjectDtoRequest dtoRequest) {
+        setName(dtoRequest.getName());
+        setStartDate(dtoRequest.getStartDate());
+        setExpectedEndDate(dtoRequest.getExpectedEndDate());
+        setEndDate(dtoRequest.getEndDate());
+        setDescription(dtoRequest.getDescription());
+        setStatus(dtoRequest.getStatus());
+        setBudget(dtoRequest.getBudget());
+        setRisk(dtoRequest.getRisk());
+        setManagerId(dtoRequest.getManagerId());
+    }
 
 }

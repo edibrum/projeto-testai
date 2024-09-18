@@ -3,6 +3,8 @@ package br.com.exemplo.testai.cases.projectMember;
 
 import br.com.exemplo.testai.cases.person.PersonRepository;
 import br.com.exemplo.testai.cases.project.ProjectRepository;
+import br.com.exemplo.testai.config.exceptions.CustomExceptionErrorMessage;
+import br.com.exemplo.testai.config.exceptions.CustomNotFoundException;
 import br.com.exemplo.testai.models.Person;
 import br.com.exemplo.testai.models.Project;
 import br.com.exemplo.testai.models.ProjectMember;
@@ -34,7 +36,7 @@ public class ProjectMemberService {
     public ProjectMemberDtoResponse save(ProjectMemberDtoRequest dtoRequest) {
 
         if (dtoRequest.getId() != null && !repository.existsById(dtoRequest.getId())) {
-            throw new RuntimeException("Nenhum registro encontrado com o ID informado (" + dtoRequest.getId() + ").");
+            throw new CustomNotFoundException("Nenhum registro encontrado com o ID informado (" + dtoRequest.getId() + ").");
         }
 
         if (dtoRequest.getId() != null && repository.existsById(dtoRequest.getId())) {
@@ -46,7 +48,7 @@ public class ProjectMemberService {
         Person person = personRepository.findById(dtoRequest.getPersonId()).orElse(null);
 
         if (project == null || person == null) {
-            throw new RuntimeException("Registros não encontrados com os IDs informados (Projeto: " +
+            throw new CustomNotFoundException("Registros não encontrados com os IDs informados (Projeto: " +
                     dtoRequest.getProjectId() + ", Pessoa: " + dtoRequest.getPersonId() + ").");
         }
 
@@ -81,7 +83,7 @@ public class ProjectMemberService {
         ProjectMember existingRegister = repository.findById(id).orElse(null);
 
         if (existingRegister == null) {
-            throw new RuntimeException("Nenhum registro encontrado com o ID informado (" + id + ").");
+            throw new CustomNotFoundException("Nenhum registro encontrado com o ID informado (" + id + ").");
         }
 
         return new ProjectMemberDtoResponse(existingRegister);
@@ -92,20 +94,20 @@ public class ProjectMemberService {
         ProjectMember existingRegister = repository.findById(id).orElse(null);
 
         if (existingRegister == null) {
-            throw new RuntimeException("Nenhum registro encontrado com o ID informado (" + id + ").");
+            throw new CustomNotFoundException("Nenhum registro encontrado com o ID informado (" + id + ").");
         }
 
         if (existingRegister.getStartDate() != null && existingRegister.getStartDate().after(new Date())) {
             String data = existingRegister.getStartDate().toString();
-            throw new RuntimeException("O vínculo do colaborador com o projeto teve início em " + data +"." +
-                    "Inserir data de fim do vínculo ao invés de excluir neste caso.");
+            throw new CustomExceptionErrorMessage("O vínculo do colaborador com o projeto teve início em " + data +
+                    ". Inserir data de fim do vínculo ao invés de excluir neste caso.");
         }
 
         try {
             repository.deleteById(id);
             return "Registro excluído com sucesso.";
         } catch (Exception e) {
-            return "Erro ao excluir o registro" + ", cause: " + e.getCause() + ", message: " + e.getMessage();
+            throw new CustomExceptionErrorMessage("Erro ao excluir o registro" + ", Message: " + e.getMessage());
         }
 
     }

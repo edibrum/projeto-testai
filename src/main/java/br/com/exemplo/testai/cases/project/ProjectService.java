@@ -1,6 +1,11 @@
 package br.com.exemplo.testai.cases.project;
 
+import br.com.exemplo.testai.cases.projectMember.ProjectMemberRepository;
+import br.com.exemplo.testai.config.exceptions.CustomExceptionErrorMessage;
+import br.com.exemplo.testai.config.exceptions.CustomHasDependentRegistersException;
+import br.com.exemplo.testai.config.exceptions.CustomNotFoundException;
 import br.com.exemplo.testai.models.Project;
+import br.com.exemplo.testai.models.ProjectMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +19,9 @@ public class ProjectService {
 
     @Autowired
     private ProjectRepository repository;
+
+    @Autowired
+    private ProjectMemberRepository projectMemberRepository;
 
     public Page<ProjectDtoResponse> listAll(Pageable paginacao){
         Page<Project> entityList = repository.findAll(paginacao);
@@ -64,7 +72,7 @@ public class ProjectService {
         Project existingRegister = repository.findById(id).orElse(null);
 
         if (existingRegister == null) {
-            throw new RuntimeException("Nenhum registro encontrado com o ID informado (" + id + ").");
+            throw new CustomNotFoundException("Nenhum registro encontrado com o ID informado (" + id + ").");
         }
 
         return new ProjectDtoResponse(existingRegister);
@@ -75,21 +83,33 @@ public class ProjectService {
         Project existingRegister = repository.findById(id).orElse(null);
 
         if (existingRegister == null) {
-            throw new RuntimeException("Nenhum registro encontrado com o ID informado (" + id + ").");
+            throw new CustomNotFoundException("Nenhum registro encontrado com o ID informado (" + id + ").");
         }
 
         //REGRA DE NEGÓCIO DO CLIENTE: projeto com status iniciado, em andamento ou encerrado não deve ser excluído;
         List<String> statusDeleteBlocking = Arrays.asList("Iniciado", "Em Andamento", "Encerrado");
 
         if (statusDeleteBlocking.contains(existingRegister.getStatus())) {
-            throw new RuntimeException("Atenção: Projeto com status Iniciado, Em Andamento ou Encerrado não deve ser excluído.");
+            throw new CustomExceptionErrorMessage("Atenção: Projeto com status Iniciado, Em Andamento ou Encerrado não deve ser excluído.");
         }
+
+        List<ProjectMember> projectMemberList = projectMemberRepository.findByProjectId(existingRegister.getId());
+
+        if (projectMemberList == null || !projectMemberList.isEmpty()) {
+            throw new CustomHasDependentRegistersException("Projeto (" + id + ") já possui membros vinculados. Exclusão não permitida.");
+        }
+// TODO: verificar com PO/SCRUM sobre este ponto - exclusão quando o Projeto tem membros (pessoas) vinculados a ele
+//        if (projectMemberList == null && !projectMemberList.isEmpty()) {
+//            projectMemberList.forEach(pm -> {
+//                projectMemberRepository.deleteById(pm.getId());
+//            });
+//        }
 
         try {
             repository.deleteById(id);
             return "Registro excluído com sucesso.";
         } catch (Exception e) {
-            return "Erro ao excluir o registro" + ", cause: " + e.getCause() + ", message: " + e.getMessage();
+            throw new CustomExceptionErrorMessage("Erro ao excluir o registro" + ", Message: " + e.getMessage());
         }
 
     }

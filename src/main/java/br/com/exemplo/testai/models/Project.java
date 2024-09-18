@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,10 +14,13 @@ import java.util.Date;
 @Table(name = "projeto")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
+public class Project implements Serializable {
+
+    private static final Long seralVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "nome", length = 200, nullable = false)

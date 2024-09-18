@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -16,11 +17,14 @@ import java.util.Date;
 @Table(name = "membros")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectMember {
-    //TODO: alinhar sobre usar um ID pro relacionamento, uma vez que poderemos ter o mesmo profissional
-    // em diferentes periodos desempenhando diferentes funcoes, inclusive (cenário de uma promoção, por exemplo)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProjectMember implements Serializable {
+        //TODO: alinhar sobre usar um ID pro relacionamento, uma vez que poderemos ter o mesmo profissional
+        // em diferentes periodos desempenhando diferentes funcoes, inclusive (cenário de uma promoção, por exemplo)
+        private static final Long seralVersionUID = 1L;
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = { CascadeType.PERSIST, CascadeType.MERGE})

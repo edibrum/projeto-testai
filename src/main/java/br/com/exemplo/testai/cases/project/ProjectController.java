@@ -2,6 +2,7 @@ package br.com.exemplo.testai.cases.project;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/project")
+@Tag(name = "Projeto")
 public class ProjectController {
 
     @Autowired

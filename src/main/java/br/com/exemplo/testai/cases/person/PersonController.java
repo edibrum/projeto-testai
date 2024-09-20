@@ -1,6 +1,7 @@
 package br.com.exemplo.testai.cases.person;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/person")
+@Tag(name = "Pessoa")
 public class PersonController {
 
     @Autowired

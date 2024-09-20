@@ -13,14 +13,6 @@ import org.springframework.web.client.RestTemplate;
 public class TestaiApplication implements CommandLineRunner {
 
 	@Bean
-	public OpenAPI springTestaiAPI() {
-		return new OpenAPI()
-				.info(new Info().title("Testai Application")
-						.description("Documentação da Api do Easymbark")
-						.version("v1.0.0"));
-	}
-
-	@Bean
 	RestTemplate restTeamplate() { return new RestTemplate(); }
 
 	public static void main(String[] args) {

@@ -13,7 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ProjectMemberService {
@@ -31,6 +33,20 @@ public class ProjectMemberService {
         Page<ProjectMember> entityList = repository.findAll(paginacao);
 
         return entityList.map(ProjectMemberDtoResponse::new);
+    }
+
+    public List<ProjectMemberDtoResponse> listAllByProjectId(Long projectId){
+        List<ProjectMember> entityList = repository.findByProjectId(projectId);
+        List<ProjectMemberDtoResponse> responseList = new ArrayList<ProjectMemberDtoResponse>();
+
+        if (entityList.isEmpty()) {
+            return responseList;
+        } else {
+            entityList.forEach(p -> {
+                responseList.add(new ProjectMemberDtoResponse(p));
+            });
+            return responseList;
+        }
     }
 
     public ProjectMemberDtoResponse save(ProjectMemberDtoRequest dtoRequest) {

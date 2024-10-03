@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/project-member")
@@ -26,6 +27,14 @@ public class ProjectMemberController {
     public Page<ProjectMemberDtoResponse> listarTodos(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5) Pageable paginacao) {
         return service.listAll(paginacao);
+    }
+
+    @GetMapping("/list-all-by-project/{projectId}")
+    @Operation(summary = "Listar os Membros de um Projeto", description = "Listar os Membros de um Projeto")
+    public List<ProjectMemberDtoResponse> listarMembrosDoProjeto(
+            @Parameter(name = "projectId", required = true)
+            @PathVariable Long projectId) {
+        return service.listAllByProjectId(projectId);
     }
 
 

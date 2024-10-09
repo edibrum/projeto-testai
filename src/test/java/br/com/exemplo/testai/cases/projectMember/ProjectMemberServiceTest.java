@@ -22,10 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -69,6 +66,25 @@ public class ProjectMemberServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals(dtoResponse.getId(), result.getContent().get(0).getId());
+    }
+
+    @Test
+    void testListAllByProjectId() {
+        Project project = new Project();
+        Person person = new Person();
+        ProjectMember projectMember = new ProjectMember();
+        projectMember.setProject(project);
+        projectMember.setPerson(person);
+
+        ProjectMemberDtoResponse dtoResponse = new ProjectMemberDtoResponse(projectMember);
+        List<ProjectMember> projectMemberList = new ArrayList<>(Collections.singletonList(projectMember));
+        given(projectMemberRepository.findByProjectId(any())).willReturn(projectMemberList);
+
+        List<ProjectMemberDtoResponse> result = projectMemberService.listAllByProjectId(project.getId());
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(dtoResponse.getId(), result.get(0).getId());
     }
 
     @Test
